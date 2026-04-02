@@ -1,0 +1,765 @@
+/* Repo Insight — Main Stylesheet */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none !important;
+}
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f8fa;
+    --bg-sidebar: #24292e;
+    --text-primary: #24292e;
+    --text-secondary: #586069;
+    --text-sidebar: #e1e4e8;
+    --border-color: #e1e4e8;
+    --accent-color: #0366d6;
+    --accent-hover: #0256b9;
+    --user-bubble: #0366d6;
+    --assistant-bubble: #f6f8fa;
+    --success-color: #28a745;
+    --error-color: #d73a49;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+
+#sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #1b1f23;
+}
+
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid #444d56;
+}
+
+.sidebar-header h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+#btn-new-session {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#btn-new-session:hover {
+    background: var(--accent-hover);
+}
+
+.session-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.session-item {
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: var(--text-sidebar);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-item:hover {
+    background: #2f363d;
+}
+
+.session-item.active {
+    background: #2f363d;
+    border-left: 3px solid var(--accent-color);
+}
+
+.session-item span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.session-item .delete-btn {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: #d73a49;
+    cursor: pointer;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.session-item .delete-btn:hover {
+    background: rgba(215, 58, 73, 0.15);
+}
+
+.session-item:hover .delete-btn {
+    opacity: 1;
+}
+
+/* ---- Chat Area ---- */
+
+#chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+#chat-header {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    background: var(--bg-secondary);
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.message {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message.user {
+    align-items: flex-end;
+}
+
+.message.assistant {
+    align-items: flex-start;
+}
+
+.message .bubble {
+    max-width: 80%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 14px;
+    word-wrap: break-word;
+    position: relative;
+}
+
+/* ---- Copy Button (bubble-level) ---- */
+/* For assistant bubbles: appears on hover at the top-right corner.
+   For user bubbles: appears below the bubble to avoid overlapping
+   white text on blue background. */
+
+.bubble-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.06);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 1;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bubble-copy-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.message .bubble:hover .bubble-copy-btn {
+    opacity: 0.7;
+}
+
+.bubble-copy-btn:hover {
+    opacity: 1 !important;
+    background: rgba(0, 0, 0, 0.12);
+    color: var(--text-primary);
+}
+
+.bubble-copy-btn.copied {
+    opacity: 1 !important;
+    color: var(--success-color);
+}
+
+/* User bubbles: position the copy button outside the bubble (bottom-right)
+   so it never overlaps the message text on the dark background. */
+.message.user .bubble-copy-btn {
+    position: absolute;
+    top: auto;
+    bottom: -22px;
+    right: 0;
+    background: none;
+    color: var(--text-secondary);
+}
+
+.message.user .bubble {
+    /* Extra margin to make room for the external copy button */
+    margin-bottom: 4px;
+}
+
+.message.user .bubble:hover .bubble-copy-btn {
+    opacity: 0.6;
+}
+
+.message.user .bubble-copy-btn:hover {
+    opacity: 1 !important;
+    color: var(--text-primary);
+}
+
+.message.user .bubble-copy-btn.copied {
+    color: var(--success-color);
+}
+
+/* ---- Copy Button (code block) ---- */
+/* Appears on hover at the top-right of <pre> code blocks inside bubbles. */
+
+.message .bubble pre {
+    position: relative;
+}
+
+.code-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 4px;
+    color: #656d76;
+    opacity: 0;
+    transition: opacity 0.15s;
+    line-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.code-copy-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.message .bubble pre:hover .code-copy-btn {
+    opacity: 1;
+}
+
+.code-copy-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #24292f;
+}
+
+.code-copy-btn.copied {
+    opacity: 1;
+    color: #1a7f37;
+}
+
+.message.user .bubble {
+    background: var(--user-bubble);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.message.user .bubble a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.message.assistant .bubble {
+    background: var(--assistant-bubble);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 4px;
+}
+
+.message .bubble pre {
+    background: #f6f8fa;
+    color: #24292f;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 8px 0;
+    border: 1px solid #d0d7de;
+}
+
+/* Let highlight.js github theme handle syntax colors natively */
+.message .bubble pre .hljs {
+    background: transparent;
+    padding: 0;
+}
+
+.message .bubble code {
+    background: #eff1f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #24292f;
+}
+
+.message .bubble pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+.message .role-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+/* ---- Reasoning (Thinking) Panel ---- */
+/* Collapsible panel shown above the assistant's main content bubble when the
+   LLM produces reasoning/thinking tokens (e.g. Ollama qwen3, DeepSeek-R1).
+   Uses the native <details>/<summary> elements for zero-JS expand/collapse.
+   The panel is hidden by default and only revealed when the first reasoning
+   token arrives from the SSE stream. */
+
+.reasoning-panel {
+    max-width: 80%;
+    margin-bottom: 6px;
+    border: 1px solid #e8dff5;
+    border-radius: 8px;
+    background: #faf8ff;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.reasoning-panel summary {
+    padding: 6px 12px;
+    cursor: pointer;
+    color: #7c3aed;
+    font-weight: 600;
+    font-size: 12px;
+    user-select: none;
+    background: #f3effc;
+    border-bottom: 1px solid transparent;
+}
+
+.reasoning-panel[open] summary {
+    border-bottom: 1px solid #e8dff5;
+}
+
+.reasoning-panel summary:hover {
+    background: #ede8f8;
+}
+
+/* Remove the default disclosure triangle and use a custom one */
+.reasoning-panel summary::marker,
+.reasoning-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+.reasoning-panel summary::before {
+    content: '▶ ';
+    font-size: 10px;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+.reasoning-panel[open] summary::before {
+    content: '▼ ';
+}
+
+.reasoning-content {
+    padding: 8px 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Reasoning content inherits markdown styles but with muted colors */
+.reasoning-content pre {
+    background: #1b1f23;
+    color: #e1e4e8;
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 6px 0;
+    font-size: 12px;
+}
+
+.reasoning-content code {
+    background: #f0f0f0;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.reasoning-content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+/* ---- Working Indicator ---- */
+/* Shown inside the assistant bubble while waiting for the first token.
+   A pulsing animation provides visual feedback that the system is processing. */
+
+.working-indicator {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-style: italic;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ---- Input Area ---- */
+
+.input-area {
+    display: flex;
+    flex-direction: column;
+    margin: 0 16px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-area:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(3, 102, 214, 0.15);
+}
+
+#user-input {
+    width: 100%;
+    padding: 12px 14px 4px;
+    border: none;
+    border-radius: 12px 12px 0 0;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 52px;
+    max-height: 420px;
+    line-height: 1.4;
+    box-sizing: border-box;
+    background: transparent;
+    overflow-y: auto;
+}
+
+#user-input:focus {
+    outline: none;
+}
+
+.input-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px 8px;
+}
+
+.input-toolbar-right {
+    display: flex;
+    gap: 6px;
+}
+
+.ctrl-enter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+    padding-left: 4px;
+}
+
+.ctrl-enter-toggle input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+#btn-send {
+    padding: 6px 16px;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+#btn-send:hover {
+    background: var(--accent-hover);
+}
+
+#btn-send:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+#btn-stop {
+    padding: 6px 16px;
+    background: var(--error-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+#btn-stop:hover {
+    opacity: 0.9;
+}
+
+#btn-stop.hidden {
+    display: none;
+}
+
+/* ---- Report Panel ---- */
+
+#report-panel {
+    width: 400px;
+    min-width: 400px;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+}
+
+#report-panel.hidden {
+    display: none;
+}
+
+.report-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-secondary);
+}
+
+.report-header h3 {
+    flex: 1;
+    font-size: 14px;
+}
+
+.report-header button {
+    padding: 4px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    background: var(--bg-primary);
+}
+
+#btn-download-report {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+#report-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+/* ---- Markdown content styles ---- */
+
+.bubble h1,
+.bubble h2,
+.bubble h3,
+.bubble h4 {
+    margin: 12px 0 6px 0;
+}
+
+.bubble h1 {
+    font-size: 1.4em;
+}
+
+.bubble h2 {
+    font-size: 1.2em;
+}
+
+.bubble h3 {
+    font-size: 1.1em;
+}
+
+.bubble ul,
+.bubble ol {
+    padding-left: 20px;
+    margin: 8px 0;
+}
+
+.bubble table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.bubble th,
+.bubble td {
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.bubble th {
+    background: var(--bg-secondary);
+}
+
+.bubble a {
+    color: var(--accent-color);
+}
+
+.bubble blockquote {
+    border-left: 3px solid var(--border-color);
+    padding-left: 12px;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+/* ---- Confirmation Dialog ---- */
+
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-dialog {
+    background: var(--bg-primary);
+    border-radius: 10px;
+    padding: 24px;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.confirm-dialog h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.confirm-dialog p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.confirm-dialog .btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.confirm-dialog button {
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.confirm-dialog .btn-cancel {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.confirm-dialog .btn-cancel:hover {
+    background: var(--bg-secondary);
+}
+
+.confirm-dialog .btn-confirm {
+    background: var(--error-color);
+    color: #fff;
+    border-color: var(--error-color);
+}
+
+.confirm-dialog .btn-confirm:hover {
+    opacity: 0.9;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        width: 60px;
+        min-width: 60px;
+    }
+
+    .sidebar-header h2,
+    .session-item span {
+        display: none;
+    }
+
+    #report-panel {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        width: 100%;
+    }
+}

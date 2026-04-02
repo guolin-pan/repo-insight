@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Repo Insight</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="vendor/highlight.js/styles/github.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Sidebar: Session List -->
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h2>Repo Insight</h2>
+                <button id="btn-new-session" title="New Chat">+ New Chat</button>
+            </div>
+            <div id="session-list" class="session-list"></div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main id="chat-area">
+            <div id="chat-header">
+                <span id="session-title">New Chat</span>
+            </div>
+            <div id="messages" class="messages"></div>
+            <div class="input-area">
+                <textarea id="user-input" placeholder="Ask about GitHub projects... (Ctrl+Enter to send)"
+                    rows="2"></textarea>
+                <div class="input-toolbar">
+                    <label class="ctrl-enter-toggle"
+                        title="When checked, use Ctrl+Enter to send and Enter for new line">
+                        <input type="checkbox" id="chk-ctrl-enter" checked>
+                        <span>Ctrl+Enter</span>
+                    </label>
+                    <div class="input-toolbar-right">
+                        <button id="btn-send" title="Send">Send</button>
+                        <button id="btn-stop" class="hidden" title="Stop">Stop</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Report Panel (slide-in) -->
+    <aside id="report-panel" class="hidden">
+        <div class="report-header">
+            <h3>Report</h3>
+            <button id="btn-close-report">Close</button>
+            <button id="btn-download-report">Download</button>
+        </div>
+        <div id="report-content"></div>
+    </aside>
+    </div>
+
+    <script src="vendor/marked/marked.min.js"></script>
+    <script src="vendor/highlight.js/highlight.min.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
